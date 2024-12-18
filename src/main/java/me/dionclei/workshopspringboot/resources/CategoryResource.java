@@ -16,7 +16,7 @@ import me.dionclei.workshopspringboot.services.UserService;
 
 @RestController
 @RequestMapping(value = "/categories")
-public class CaregoryResource {
+public class CategoryResource {
 	
 	@Autowired
 	private CategoryService service;

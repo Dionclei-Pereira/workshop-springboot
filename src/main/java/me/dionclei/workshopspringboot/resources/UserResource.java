@@ -1,9 +1,13 @@
 package me.dionclei.workshopspringboot.resources;
 
+import java.lang.System.Logger;
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import me.dionclei.workshopspringboot.dto.OrderItemRequest;
+import me.dionclei.workshopspringboot.dto.OrderRequest;
+import me.dionclei.workshopspringboot.entities.Order;
+import me.dionclei.workshopspringboot.entities.OrderItem;
+import me.dionclei.workshopspringboot.entities.Product;
 import me.dionclei.workshopspringboot.entities.User;
+import me.dionclei.workshopspringboot.enums.OrderStatus;
+import me.dionclei.workshopspringboot.services.OrderService;
+import me.dionclei.workshopspringboot.services.ProductService;
 import me.dionclei.workshopspringboot.services.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -24,35 +36,65 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class UserResource {
 	
 	@Autowired
-	private UserService service;
+	private UserService userService;
+	@Autowired
+	private ProductService productService;
+	@Autowired
+	private OrderService orderService;
+	
 	
 	@GetMapping
 	public ResponseEntity<List<User>> findAll() {
-		List<User> users = service.findAll();
+		List<User> users = userService.findAll();
 		return ResponseEntity.ok().body(users);
 	}
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<User> findById(@PathVariable long id) {
-		return ResponseEntity.ok().body(service.findById(id));
+		return ResponseEntity.ok().body(userService.findById(id));
 	}
 	
 	@PostMapping
 	public ResponseEntity<User> insert(@RequestBody User obj) {
-		obj = service.insert(obj);
+		obj = userService.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);
 	}
 	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		service.delete(id);
+		userService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) {
-		obj = service.update(id, obj);
+		obj = userService.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
+	
+	@PutMapping(value = "/{id}/orders")
+	public ResponseEntity<Order> addOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
+		
+		User user = userService.findById(id);
+		Order order = new Order();
+		order.setClient(user);
+		order.setMoment(Instant.now());
+		order.setId(null);
+		order.setOrderStatus(OrderStatus.WAITING_PAYMENT);
+		for(OrderItemRequest orderItemRequest : orderRequest.getOrderItems()) {
+			Product prod = productService.findById(orderItemRequest.getProductId());
+			OrderItem orderItem = new OrderItem();
+			orderItem.setProduct(prod);
+			orderItem.setQuantity(orderItemRequest.getQuantity());
+			orderItem.setPrice(prod.getPrice());
+			orderItem.setOrder(order);
+			order.getItems().add(orderItem);
+		}
+		user.getOrders().add(order);
+		orderService.save(order);
+		userService.insert(user);
+		return ResponseEntity.status(HttpStatus.CREATED).body(order);
+	}
+	
 }

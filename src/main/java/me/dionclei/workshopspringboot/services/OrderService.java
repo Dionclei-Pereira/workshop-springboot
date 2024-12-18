@@ -29,4 +29,9 @@ public class OrderService {
 		}
 		return null;
 	}
+	
+	public void save(Order obj) {
+		repository.save(obj);
+	}
+	
 }
