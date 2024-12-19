@@ -3,7 +3,9 @@ package me.dionclei.workshopspringboot.resources;
 import java.lang.System.Logger;
 import java.net.URI;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import me.dionclei.workshopspringboot.dto.OrderItemRequest;
-import me.dionclei.workshopspringboot.dto.OrderRequest;
 import me.dionclei.workshopspringboot.entities.Order;
 import me.dionclei.workshopspringboot.entities.OrderItem;
 import me.dionclei.workshopspringboot.entities.Product;
 import me.dionclei.workshopspringboot.entities.User;
+import me.dionclei.workshopspringboot.entities.dto.OrderDTO;
+import me.dionclei.workshopspringboot.entities.dto.OrderItemRequest;
+import me.dionclei.workshopspringboot.entities.dto.OrderRequest;
+import me.dionclei.workshopspringboot.entities.dto.UserDTO;
 import me.dionclei.workshopspringboot.enums.OrderStatus;
 import me.dionclei.workshopspringboot.services.OrderService;
 import me.dionclei.workshopspringboot.services.ProductService;
@@ -44,9 +48,12 @@ public class UserResource {
 	
 	
 	@GetMapping
-	public ResponseEntity<List<User>> findAll() {
-		List<User> users = userService.findAll();
-		return ResponseEntity.ok().body(users);
+	public ResponseEntity<List<UserDTO>> findAll() {
+	    List<User> users = userService.findAll();
+	    List<UserDTO> usersDTO = users.stream()
+	                                  .map(User::toDTO)
+	                                  .collect(Collectors.toList());
+	    return ResponseEntity.ok(usersDTO);
 	}
 	
 	@GetMapping(value = "/{id}")
@@ -55,10 +62,10 @@ public class UserResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<User> insert(@RequestBody User obj) {
+	public ResponseEntity<UserDTO> insert(@RequestBody User obj) {
 		obj = userService.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).body(obj);
+		return ResponseEntity.created(uri).body(obj.toDTO());
 	}
 	
 	@DeleteMapping(value = "/{id}")
@@ -68,13 +75,13 @@ public class UserResource {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) {
+	public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody User obj) {
 		obj = userService.update(id, obj);
-		return ResponseEntity.ok().body(obj);
+		return ResponseEntity.ok().body(obj.toDTO());
 	}
 	
 	@PutMapping(value = "/{id}/orders")
-	public ResponseEntity<Order> addOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
+	public ResponseEntity<OrderDTO> addOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
 		
 		User user = userService.findById(id);
 		Order order = new Order();
@@ -94,7 +101,7 @@ public class UserResource {
 		user.getOrders().add(order);
 		orderService.save(order);
 		userService.insert(user);
-		return ResponseEntity.status(HttpStatus.CREATED).body(order);
+		return ResponseEntity.status(HttpStatus.CREATED).body(order.toDTO());
 	}
 	
 }

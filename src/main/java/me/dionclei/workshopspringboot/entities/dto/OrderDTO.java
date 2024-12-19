@@ -1,4 +1,4 @@
-package me.dionclei.workshopspringboot.entities;
+package me.dionclei.workshopspringboot.entities.dto;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -16,46 +16,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import me.dionclei.workshopspringboot.entities.dto.OrderDTO;
+import me.dionclei.workshopspringboot.entities.OrderItem;
+import me.dionclei.workshopspringboot.entities.Payment;
+import me.dionclei.workshopspringboot.entities.User;
 import me.dionclei.workshopspringboot.enums.OrderStatus;
 
-@Entity
-@Table(name = "TB_Order")
-public class Order implements Serializable {
+public class OrderDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
-	
-	@ManyToOne
-	@JoinColumn(name = "client_id")
-	private User client;
+	private UserDTO client;
 	private Integer orderStatus;
-	@OneToMany(mappedBy = "id.order", cascade = CascadeType.ALL)
 	private Set<OrderItem> items = new HashSet<>();
-	
-	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
 	
-	public Order() {}
+	public OrderDTO() {}
 	
-	public Order(Long id, Instant moment,OrderStatus orderStatus ,User client) {
+	public OrderDTO(Long id, Instant moment,OrderStatus orderStatus ,User client) {
 		super();
-		this.client = client;
+		this.client = client.toDTO();
 		this.moment = moment;
 		setOrderStatus(orderStatus);
 		this.id = id;
 	}
 
-	public OrderDTO toDTO() {
-		return new OrderDTO(this.id, this.moment, this.getOrderStatus(), this.client);
-	}
-	
 	public Payment getPayment() {
 		return payment;
 	}
@@ -94,12 +80,12 @@ public class Order implements Serializable {
 		}
 	}
 
-	public User getClient() {
+	public UserDTO getClient() {
 		return client;
 	}
 
 	public void setClient(User client) {
-		this.client = client;
+		this.client = client.toDTO();
 	}
 
 	public Double getTotal() {
@@ -123,7 +109,7 @@ public class Order implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Order other = (Order) obj;
+		OrderDTO other = (OrderDTO) obj;
 		return Objects.equals(client, other.client) && Objects.equals(id, other.id)
 				&& Objects.equals(moment, other.moment);
 	}

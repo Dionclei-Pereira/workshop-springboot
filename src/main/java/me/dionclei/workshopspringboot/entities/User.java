@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import me.dionclei.workshopspringboot.entities.dto.UserDTO;
 
 @Entity
 @Table(name = "tb_user")
@@ -39,6 +40,10 @@ public class User implements Serializable {
 		this.email = email;
 		this.phone = phone;
 		this.password = password;
+	}
+	
+	public UserDTO toDTO() {
+		return new UserDTO(this.id, this.name, this.email, this.orders);
 	}
 	
 	public List<Order> getOrders() {

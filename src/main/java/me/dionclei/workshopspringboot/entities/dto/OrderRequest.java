@@ -1,4 +1,4 @@
-package me.dionclei.workshopspringboot.dto;
+package me.dionclei.workshopspringboot.entities.dto;
 
 import java.util.ArrayList;
 import java.util.List;

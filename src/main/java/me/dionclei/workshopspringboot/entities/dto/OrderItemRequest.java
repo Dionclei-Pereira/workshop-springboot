@@ -1,4 +1,4 @@
-package me.dionclei.workshopspringboot.dto;
+package me.dionclei.workshopspringboot.entities.dto;
 
 public class OrderItemRequest {
 	private Long productId;
