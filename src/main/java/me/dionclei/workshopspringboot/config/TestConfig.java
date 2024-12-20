@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import me.dionclei.workshopspringboot.entities.Category;
 import me.dionclei.workshopspringboot.entities.Order;
@@ -15,6 +16,7 @@ import me.dionclei.workshopspringboot.entities.Payment;
 import me.dionclei.workshopspringboot.entities.Product;
 import me.dionclei.workshopspringboot.entities.User;
 import me.dionclei.workshopspringboot.enums.OrderStatus;
+import me.dionclei.workshopspringboot.enums.UserRole;
 import me.dionclei.workshopspringboot.repositories.CategoryRepository;
 import me.dionclei.workshopspringboot.repositories.OrderItemRepository;
 import me.dionclei.workshopspringboot.repositories.OrderRepository;
@@ -37,8 +39,8 @@ public class TestConfig implements CommandLineRunner {
 	private OrderItemRepository orderItemRepository;
 	@Override
 	public void run(String... args) throws Exception {
-		User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
-		User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "123456"); 
+		User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "12345678", UserRole.ADMIN);
+		User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "87654321", UserRole.USER); 
 		userRepository.saveAll(Arrays.asList(u1, u2));
 		
 		Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, u1);

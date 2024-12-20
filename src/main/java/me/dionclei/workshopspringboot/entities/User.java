@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,6 +19,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import me.dionclei.workshopspringboot.entities.dto.UserDTO;
 import me.dionclei.workshopspringboot.enums.UserRole;
 
@@ -29,10 +34,18 @@ public class User implements Serializable, UserDetails{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank(message = "Name can not be empty")
+	@Size(min = 3, max = 20, message = "Name must be between 3 and 20")
 	private String name;
+	@Email(message = "Email must be valid")
+	@NotBlank(message = "Email can not be empty")
 	private String email;
+	@NotBlank(message = "Phone can not be empty")
 	private String phone;
+	@NotBlank(message = "Password can not be empty")
 	private String password;
+	@NotNull
 	private UserRole role;
 	
 	@JsonIgnore
@@ -41,12 +54,13 @@ public class User implements Serializable, UserDetails{
 	
 	public User() {}
 
-	public User(Long id, String name, String email, String phone, String password) {
+	public User(Long id, String name, String email, String phone, String password, UserRole role) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
-		this.password = password;
+		this.password = new BCryptPasswordEncoder().encode(password);
+		this.role = role;
 	}
 	
 	public UserDTO toDTO() {
@@ -67,7 +81,6 @@ public class User implements Serializable, UserDetails{
 	public List<Order> getOrders() {
 		return orders;
 	}
-	
 	
 	public Long getId() {
 		return id;
@@ -114,7 +127,7 @@ public class User implements Serializable, UserDetails{
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = new BCryptPasswordEncoder().encode(password);
 	}
 
 	@Override

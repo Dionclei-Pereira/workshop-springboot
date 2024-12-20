@@ -53,9 +53,12 @@ public class Order implements Serializable {
 	}
 
 	public OrderDTO toDTO() {
-		return new OrderDTO(this.id, this.moment, this.getOrderStatus(), this.client);
+		return new OrderDTO(this.id, this.moment, this.getOrderStatus(), client);
 	}
 	
+	public OrderDTO toDTOWithoutClient() {
+		return new OrderDTO(this.id, this.moment, this.getOrderStatus());
+	}
 	public Payment getPayment() {
 		return payment;
 	}

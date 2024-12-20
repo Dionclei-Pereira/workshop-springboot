@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -33,6 +34,14 @@ public class OrderDTO implements Serializable {
 	private Payment payment;
 	
 	public OrderDTO() {}
+	
+	public OrderDTO(Long id, Instant moment,OrderStatus orderStatus) {
+		super();
+		this.client = null;
+		this.moment = moment;
+		setOrderStatus(orderStatus);
+		this.id = id;
+	}
 	
 	public OrderDTO(Long id, Instant moment,OrderStatus orderStatus ,User client) {
 		super();

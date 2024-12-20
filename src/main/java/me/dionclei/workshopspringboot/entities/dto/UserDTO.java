@@ -25,7 +25,7 @@ public class UserDTO implements Serializable {
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.orders = orders.stream().map(Order::toDTO).collect(Collectors.toList());
+		this.orders = orders.stream().map(Order::toDTOWithoutClient).collect(Collectors.toList());
 	}
 
 	public Long getId() {
