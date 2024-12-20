@@ -2,8 +2,13 @@ package me.dionclei.workshopspringboot.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -14,10 +19,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import me.dionclei.workshopspringboot.entities.dto.UserDTO;
+import me.dionclei.workshopspringboot.enums.UserRole;
 
 @Entity
 @Table(name = "tb_user")
-public class User implements Serializable {
+public class User implements Serializable, UserDetails{
 	
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -27,6 +33,7 @@ public class User implements Serializable {
 	private String email;
 	private String phone;
 	private String password;
+	private UserRole role;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "client")
@@ -46,6 +53,17 @@ public class User implements Serializable {
 		return new UserDTO(this.id, this.name, this.email, this.orders);
 	}
 	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		if(role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+		else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+	
 	public List<Order> getOrders() {
 		return orders;
 	}
@@ -63,6 +81,14 @@ public class User implements Serializable {
 		return name;
 	}
 
+	public UserRole getRole() {
+		return role;
+	}
+	
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -107,7 +133,5 @@ public class User implements Serializable {
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
-	
+
 }

@@ -3,6 +3,7 @@ package me.dionclei.workshopspringboot.entities.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,7 +16,7 @@ public class UserDTO implements Serializable {
 	private String email;
 	
 	@JsonIgnore
-	private List<Order> orders = new ArrayList<>();
+	private List<OrderDTO> orders = new ArrayList<>();
 	
 	public UserDTO() {}
 
@@ -24,7 +25,7 @@ public class UserDTO implements Serializable {
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.orders = orders;
+		this.orders = orders.stream().map(Order::toDTO).collect(Collectors.toList());
 	}
 
 	public Long getId() {
@@ -51,15 +52,12 @@ public class UserDTO implements Serializable {
 		this.email = email;
 	}
 
-	public List<Order> getOrders() {
+	public List<OrderDTO> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(List<Order> orders) {
+	public void setOrders(List<OrderDTO> orders) {
 		this.orders = orders;
 	}
-	
-	
-	
 	
 }
