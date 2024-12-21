@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import me.dionclei.workshopspringboot.entities.User;
 import me.dionclei.workshopspringboot.entities.dto.AuthenticationRequest;
+import me.dionclei.workshopspringboot.entities.dto.LoginResponse;
 import me.dionclei.workshopspringboot.entities.dto.RegisterRequest;
 import me.dionclei.workshopspringboot.enums.UserRole;
 import me.dionclei.workshopspringboot.repositories.UserRepository;
+import me.dionclei.workshopspringboot.services.TokenService;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,12 +27,15 @@ public class AuthenticationRecourse {
 	UserRepository repository;
 	@Autowired
 	private AuthenticationManager manager;
+	@Autowired
+	private TokenService service;
 	
 	@PostMapping("/login")
-	public ResponseEntity<Void> login(@RequestBody @Valid AuthenticationRequest data) {
+	public ResponseEntity<LoginResponse> login(@RequestBody @Valid AuthenticationRequest data) {
 		var userPassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
 		var auth = this.manager.authenticate(userPassword);
-		return ResponseEntity.ok().build();
+		var token = service.generateToken((User) auth.getPrincipal());
+		return ResponseEntity.ok(new LoginResponse(token));
 	}
 	
 	@PostMapping("/register")

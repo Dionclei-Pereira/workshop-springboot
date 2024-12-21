@@ -82,7 +82,6 @@ public class UserResource {
 	
 	@PutMapping(value = "/{id}/orders")
 	public ResponseEntity<OrderDTO> addOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
-		
 		User user = userService.findById(id);
 		Order order = new Order();
 		order.setClient(user);

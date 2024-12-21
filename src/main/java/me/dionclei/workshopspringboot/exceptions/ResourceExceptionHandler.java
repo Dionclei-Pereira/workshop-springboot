@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import me.dionclei.workshopspringboot.services.exceptions.DatabaseException;
 import me.dionclei.workshopspringboot.services.exceptions.ResourceNotFoundException;
+import me.dionclei.workshopspringboot.services.exceptions.TokenException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -44,4 +45,11 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 	
+    @ExceptionHandler(TokenException.class)
+    public ResponseEntity<StandardError> tokenError(TokenException e, HttpServletRequest request) {
+    	HttpStatus status = HttpStatus.BAD_REQUEST;
+    	String message = e.getMessage();
+    	StandardError err = new StandardError(Instant.now(), status.value(), message, e.getMessage(), request.getRequestURI());
+    	return ResponseEntity.status(status).body(err);
+    }
 }
