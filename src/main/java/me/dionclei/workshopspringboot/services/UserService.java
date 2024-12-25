@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
 import me.dionclei.workshopspringboot.entities.User;
+import me.dionclei.workshopspringboot.entities.dto.OrderDTO;
 import me.dionclei.workshopspringboot.repositories.UserRepository;
 import me.dionclei.workshopspringboot.services.exceptions.DatabaseException;
 import me.dionclei.workshopspringboot.services.exceptions.ResourceNotFoundException;
@@ -54,7 +55,13 @@ public class UserService {
 			throw new ResourceNotFoundException(id);
 		}
 	}
-
+	
+	public List<OrderDTO> getOrders(Long id) {
+		var u = userRepository.findById(id);
+		User user = u.orElseThrow(() -> new ResourceNotFoundException(id));
+		return user.toDTO().getOrders();
+	}
+	
 	private void updateData(User entity, User obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());

@@ -80,6 +80,11 @@ public class UserResource {
 		return ResponseEntity.ok().body(obj.toDTO());
 	}
 	
+	@GetMapping(value = "/{id}/orders")
+	public ResponseEntity<List<OrderDTO>> getOrders(@PathVariable Long id) {
+		return ResponseEntity.ok(userService.getOrders(id)) ;
+	}
+	
 	@PutMapping(value = "/{id}/orders")
 	public ResponseEntity<OrderDTO> addOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
 		User user = userService.findById(id);
@@ -88,11 +93,11 @@ public class UserResource {
 		order.setMoment(Instant.now());
 		order.setId(null);
 		order.setOrderStatus(OrderStatus.WAITING_PAYMENT);
-		for(OrderItemRequest orderItemRequest : orderRequest.getOrderItems()) {
-			Product prod = productService.findById(orderItemRequest.getProductId());
+		for(OrderItemRequest orderItemRequest : orderRequest.orderItems()) {
+			Product prod = productService.findById(orderItemRequest.productId());
 			OrderItem orderItem = new OrderItem();
 			orderItem.setProduct(prod);
-			orderItem.setQuantity(orderItemRequest.getQuantity());
+			orderItem.setQuantity(orderItemRequest.quantity());
 			orderItem.setPrice(prod.getPrice());
 			orderItem.setOrder(order);
 			order.getItems().add(orderItem);
