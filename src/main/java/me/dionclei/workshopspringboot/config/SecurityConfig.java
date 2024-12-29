@@ -33,7 +33,8 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, "/product").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.POST, "auth/login").permitAll()
 						.requestMatchers(HttpMethod.POST, "auth/register").permitAll()
-						.requestMatchers(HttpMethod.POST, "/categories").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
 						.anyRequest().authenticated())
 				.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();

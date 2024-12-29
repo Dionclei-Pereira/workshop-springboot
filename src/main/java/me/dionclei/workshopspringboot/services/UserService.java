@@ -1,11 +1,14 @@
 package me.dionclei.workshopspringboot.services;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,11 @@ public class UserService {
 	public User findById(Long id) {
 		Optional<User> user = userRepository.findById(id);
 		return user.orElseThrow(() -> new ResourceNotFoundException(id));
+	}
+	
+	public User findByEmail(String email) {
+		User user = userRepository.findUserByEmail(email);
+		return user;
 	}
 	
 	public User insert(User obj) {
