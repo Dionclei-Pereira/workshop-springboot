@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import me.dionclei.workshopspringboot.entities.User;
 import me.dionclei.workshopspringboot.entities.dto.OrderDTO;
 import me.dionclei.workshopspringboot.repositories.UserRepository;
@@ -43,10 +44,12 @@ public class UserService {
 		return user;
 	}
 	
+	@Transactional
 	public User insert(User obj) {
 		return userRepository.save(obj);
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		try {
 			userRepository.deleteById(id);
@@ -57,6 +60,7 @@ public class UserService {
 		}
 	}
 	
+	@Transactional
 	public User update(Long id, User obj) {
 		try {
 			User entity = userRepository.getReferenceById(id);
@@ -73,6 +77,7 @@ public class UserService {
 		return user.toDTO().getOrders();
 	}
 	
+	@Transactional
 	private void updateData(User entity, User obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import me.dionclei.workshopspringboot.entities.Order;
 import me.dionclei.workshopspringboot.entities.User;
@@ -21,10 +22,12 @@ public class OrderService {
 		this.repository = repository;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Order> findAll() {
 		return repository.findAll();
 	}
 	
+	@Transactional(readOnly = true)
 	public Order findById(Long id) {
 		Optional<Order> order = repository.findById(id);
 		if (order.isPresent()) {

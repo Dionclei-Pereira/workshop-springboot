@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import me.dionclei.workshopspringboot.entities.Product;
 import me.dionclei.workshopspringboot.repositories.ProductRepository;
@@ -18,6 +19,7 @@ public class ProductService {
 		this.repository = repository;
 	}
 	
+	@Transactional(readOnly = true)
 	public Product findById(long id) {
 		Optional<Product> obj = repository.findById(id);
 		if (obj.isPresent()) {
@@ -26,6 +28,7 @@ public class ProductService {
 		return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Product> findAll() {
 		return repository.findAll();
 	}
