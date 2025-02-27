@@ -5,6 +5,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +19,12 @@ import me.dionclei.workshopspringboot.services.OrderService;
 @RequestMapping(value = "/orders")
 public class OrderResource {
 	
-	@Autowired
+	
 	private OrderService service;
+	
+	public OrderResource(OrderService service) {
+		this.service = service;
+	}
 	
 	@GetMapping
 	public ResponseEntity<List<OrderDTO>> findAll() {

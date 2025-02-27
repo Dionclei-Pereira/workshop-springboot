@@ -23,12 +23,15 @@ import me.dionclei.workshopspringboot.services.TokenService;
 @RequestMapping("/auth")
 public class AuthenticationRecourse {
 	
-	@Autowired
-	UserRepository repository;
-	@Autowired
+	private UserRepository repository;
 	private AuthenticationManager manager;
-	@Autowired
 	private TokenService service;
+	
+	public AuthenticationRecourse(UserRepository repository, AuthenticationManager manager, TokenService service) {
+		this.repository = repository;
+		this.manager = manager;
+		this.service = service;
+	}
 	
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@RequestBody @Valid AuthenticationRequest data) {

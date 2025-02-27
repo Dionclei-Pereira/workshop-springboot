@@ -12,8 +12,11 @@ import me.dionclei.workshopspringboot.repositories.ProductRepository;
 @Service
 public class ProductService {
 	
-	@Autowired
 	ProductRepository repository;
+	
+	public ProductService(ProductRepository repository) {
+		this.repository = repository;
+	}
 	
 	public Product findById(long id) {
 		Optional<Product> obj = repository.findById(id);

@@ -12,8 +12,11 @@ import me.dionclei.workshopspringboot.repositories.CategoryRepository;
 @Service
 public class CategoryService {
 	
-	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	public CategoryService(CategoryRepository categoryRepository) {
+		this.categoryRepository = categoryRepository;
+	}
 	
 	public List<Category> findAll() {
 		return categoryRepository.findAll();

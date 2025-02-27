@@ -23,8 +23,11 @@ import me.dionclei.workshopspringboot.services.exceptions.ResourceNotFoundExcept
 @Service
 public class UserService {
 	
-	@Autowired
 	private UserRepository userRepository;
+	
+	public UserService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 	
 	public List<User> findAll() {
 		return userRepository.findAll();

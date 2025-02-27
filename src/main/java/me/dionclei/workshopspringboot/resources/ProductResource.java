@@ -16,8 +16,11 @@ import me.dionclei.workshopspringboot.services.ProductService;
 @RequestMapping(value = "/products")
 public class ProductResource {
 	
-	@Autowired
 	private ProductService service;
+	
+	public ProductResource(ProductService service) {
+		this.service = service;
+	}
 	
 	@GetMapping
 	public ResponseEntity<List<Product>> findAll() {

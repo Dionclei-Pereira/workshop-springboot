@@ -18,8 +18,11 @@ import me.dionclei.workshopspringboot.services.UserService;
 @RequestMapping(value = "/categories")
 public class CategoryResource {
 	
-	@Autowired
 	private CategoryService service;
+	
+	public CategoryResource(CategoryService service) {
+		this.service = service;
+	}
 	
 	@GetMapping
 	public ResponseEntity<List<Category>> findAll() {

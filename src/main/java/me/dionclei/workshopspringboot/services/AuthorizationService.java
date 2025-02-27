@@ -10,8 +10,12 @@ import me.dionclei.workshopspringboot.repositories.UserRepository;
 
 @Service
 public class AuthorizationService implements UserDetailsService{
-	@Autowired
+
 	private UserRepository repository;
+	
+	public AuthorizationService(UserRepository repository) {
+		this.repository = repository;
+	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

@@ -42,13 +42,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping(value = "/users")
 public class UserResource {
 	
-	@Autowired
 	private UserService userService;
-	@Autowired
 	private ProductService productService;
-	@Autowired
 	private OrderService orderService;
 	
+	public UserResource(UserService userService, ProductService productService, OrderService orderService) {
+		this.userService = userService;
+		this.productService = productService;
+		this.orderService = orderService;
+	}
 	
 	@GetMapping
 	public ResponseEntity<List<UserDTO>> findAll() {

@@ -15,8 +15,11 @@ import me.dionclei.workshopspringboot.repositories.UserRepository;
 @Service
 public class OrderService {
 	
-	@Autowired
 	private OrderRepository repository;
+	
+	public OrderService(OrderRepository repository) {
+		this.repository = repository;
+	}
 	
 	public List<Order> findAll() {
 		return repository.findAll();
