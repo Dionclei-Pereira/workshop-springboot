@@ -2,6 +2,7 @@ package me.dionclei.workshopspringboot.enums;
 
 public enum UserRole {
 	ADMIN("admin"),
+	SELLER("seller"),
 	USER("user");
 	
 	private String role;

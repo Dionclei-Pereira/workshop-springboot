@@ -33,4 +33,9 @@ public class ProductService {
 		return repository.findAll();
 	}
 	
+	@Transactional
+	public Product save(Product product) {
+		return repository.save(product);
+	}
+	
 }
