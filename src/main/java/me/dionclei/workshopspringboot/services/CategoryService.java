@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import me.dionclei.workshopspringboot.entities.Category;
 import me.dionclei.workshopspringboot.repositories.CategoryRepository;
+import me.dionclei.workshopspringboot.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class CategoryService {
@@ -30,6 +31,6 @@ public class CategoryService {
 		if (cat.isPresent()) {
 			return cat.get();
 		}
-		return null;
+		throw new ResourceNotFoundException(id);
 	}
 }

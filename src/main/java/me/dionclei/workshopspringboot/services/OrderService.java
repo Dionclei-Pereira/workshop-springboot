@@ -11,6 +11,7 @@ import me.dionclei.workshopspringboot.entities.Order;
 import me.dionclei.workshopspringboot.entities.User;
 import me.dionclei.workshopspringboot.repositories.OrderRepository;
 import me.dionclei.workshopspringboot.repositories.UserRepository;
+import me.dionclei.workshopspringboot.services.exceptions.ResourceNotFoundException;
 
 
 @Service
@@ -33,7 +34,7 @@ public class OrderService {
 		if (order.isPresent()) {
 			return order.get();
 		}
-		return null;
+		throw new ResourceNotFoundException(id);
 	}
 	
 	public void save(Order obj) {

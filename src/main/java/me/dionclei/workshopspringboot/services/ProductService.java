@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import me.dionclei.workshopspringboot.entities.Product;
 import me.dionclei.workshopspringboot.repositories.ProductRepository;
+import me.dionclei.workshopspringboot.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class ProductService {
@@ -25,7 +26,7 @@ public class ProductService {
 		if (obj.isPresent()) {
 			return obj.get();
 		}
-		return null;
+		throw new ResourceNotFoundException(id);
 	}
 	
 	@Transactional(readOnly = true)

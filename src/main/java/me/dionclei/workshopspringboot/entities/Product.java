@@ -16,6 +16,11 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "TB_PRODUCT")
@@ -24,8 +29,10 @@ public class Product implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String name;
 	private String description;
+	
 	private Double price;
 	private String imgUrl;
 	
@@ -33,6 +40,7 @@ public class Product implements Serializable {
 	@JoinTable(name = "tb_product_category",
 	joinColumns = @JoinColumn(name = "product_id"),
 	inverseJoinColumns = @JoinColumn(name = "category_id"))
+	
 	private Set<Category> categories = new HashSet<>();
 	
 	@OneToMany(mappedBy = "id.product")
@@ -100,6 +108,10 @@ public class Product implements Serializable {
 
 	public Set<Category> getCategories() {
 		return categories;
+	}
+
+	public void setCategories(Set<Category> categories) {
+		this.categories = categories;
 	}
 
 	@Override

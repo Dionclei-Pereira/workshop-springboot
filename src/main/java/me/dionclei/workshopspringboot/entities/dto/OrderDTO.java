@@ -43,7 +43,7 @@ public class OrderDTO implements Serializable {
 		this.id = id;
 	}
 	
-	public OrderDTO(Long id, Instant moment,OrderStatus orderStatus ,User client) {
+	public OrderDTO(Long id, Instant moment,OrderStatus orderStatus, User client) {
 		super();
 		this.client = client.toDTO();
 		this.moment = moment;

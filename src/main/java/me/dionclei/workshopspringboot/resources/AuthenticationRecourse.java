@@ -42,8 +42,8 @@ public class AuthenticationRecourse {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequest request) {
-		if(repository.findByEmail(request.email()) != null) return ResponseEntity.badRequest().build();
+	public ResponseEntity<String> register(@RequestBody @Valid RegisterRequest request) {
+		if(repository.findByEmail(request.email()) != null) return ResponseEntity.badRequest().body("Email must be unique");
 		if(request.password().length() < 6 || request.password().length() > 16) return ResponseEntity.badRequest().build();
 		User u = new User(null, request.name(), request.email(), request.phone(), request.password(), UserRole.USER);
 		repository.save(u);
