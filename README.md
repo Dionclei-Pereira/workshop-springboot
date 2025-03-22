@@ -67,7 +67,7 @@ To run the project, you can use the your IDE or Maven CLI:
 
 The API is configured to allow login and generate a JWT token. You can use **Postman** to test the routes.
 
-- **POST** `/auth/login`: Send a `username` and `password` to receive a JWT token.
+- **POST** `/auth/login`: Send an `email` and `password` to receive a JWT token.
 - **GET** `/products`: This route is protected and requires a valid JWT token in the Authorization header.
 
 Example request for login:
