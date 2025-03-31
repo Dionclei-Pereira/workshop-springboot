@@ -7,7 +7,6 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import me.dionclei.workshopspringboot.entities.Category;
 
 public record ProductRequest(
 		@NotBlank(message = "Name can not be empty")

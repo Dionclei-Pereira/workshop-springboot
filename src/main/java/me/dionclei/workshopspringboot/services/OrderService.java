@@ -3,14 +3,11 @@ package me.dionclei.workshopspringboot.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import me.dionclei.workshopspringboot.entities.Order;
-import me.dionclei.workshopspringboot.entities.User;
 import me.dionclei.workshopspringboot.repositories.OrderRepository;
-import me.dionclei.workshopspringboot.repositories.UserRepository;
 import me.dionclei.workshopspringboot.services.exceptions.ResourceNotFoundException;
 
 

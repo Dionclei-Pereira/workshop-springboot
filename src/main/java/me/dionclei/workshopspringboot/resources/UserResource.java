@@ -1,17 +1,12 @@
 package me.dionclei.workshopspringboot.resources;
 
-import java.lang.System.Logger;
 import java.net.URI;
 import java.security.Principal;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +26,6 @@ import me.dionclei.workshopspringboot.entities.dto.OrderItemRequest;
 import me.dionclei.workshopspringboot.entities.dto.OrderRequest;
 import me.dionclei.workshopspringboot.entities.dto.UserDTO;
 import me.dionclei.workshopspringboot.enums.OrderStatus;
-import me.dionclei.workshopspringboot.enums.UserRole;
 import me.dionclei.workshopspringboot.services.OrderService;
 import me.dionclei.workshopspringboot.services.ProductService;
 import me.dionclei.workshopspringboot.services.UserService;

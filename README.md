@@ -7,7 +7,7 @@
 
 ## 📖 Description
 
-This project implements a backend. The main objective is create an API that manages a web workshop.
+This project implements a backend. The main objective is to create an API that manages a web workshop.
 
 ## 🚀 **Technologies**
 
@@ -33,7 +33,7 @@ Install these programs:
 - **Java 21**
 - **OpenSSL**
 - **IDE** (IntelliJ IDEA, Eclipse, VSCode.)
-- **Postman** (or similiar.)
+- **Postman** (or similar.)
 
 ## ⚡ Steps to Run the Project
 
@@ -61,7 +61,7 @@ openssl rsa -pubout -in private_key.pem -out public_key.pem
 
 ### 3. Run the Project
 
-To run the project, you can use the your IDE or Maven CLI:
+To run the project, you can use your IDE or Maven CLI:
 
 ### 4. Testing the API
 

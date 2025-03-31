@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import me.dionclei.workshopspringboot.entities.Category;
 import me.dionclei.workshopspringboot.entities.Order;
 import me.dionclei.workshopspringboot.entities.OrderItem;
