@@ -3,6 +3,9 @@ package me.dionclei.workshopspringboot.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -25,25 +28,30 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 	
+	@Cacheable("allUsers")
 	public List<User> findAll() {
 		return userRepository.findAll();
 	}
 	
+	@Cacheable(value = "userById", key = "#id")
 	public User findById(Long id) {
 		Optional<User> user = userRepository.findById(id);
 		return user.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
+	@Cacheable(value = "userByEmail", key = "#email")
 	public User findByEmail(String email) {
 		User user = userRepository.findUserByEmail(email);
 		return user;
 	}
 	
+	@CacheEvict(value = { "allUsers" }, allEntries = true)
 	@Transactional
 	public User insert(User obj) {
 		return userRepository.save(obj);
 	}
 	
+	@CacheEvict(value = { "allUsers", "userById", "userByEmail" }, allEntries = true)
 	@Transactional
 	public void delete(Long id) {
 		try {
@@ -55,6 +63,8 @@ public class UserService {
 		}
 	}
 	
+	@CachePut(value = "userById", key = "#id")
+	@CacheEvict(value = { "allUsers", "userByEmail" }, allEntries = true)
 	@Transactional
 	public User update(Long id, User obj) {
 		try {
@@ -66,6 +76,7 @@ public class UserService {
 		}
 	}
 	
+	@Cacheable(value = "userOrders", key = "#id")
 	public List<OrderDTO> getOrders(Long id) {
 		var u = userRepository.findById(id);
 		User user = u.orElseThrow(() -> new ResourceNotFoundException(id));

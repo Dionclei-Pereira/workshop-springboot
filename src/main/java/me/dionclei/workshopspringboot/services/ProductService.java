@@ -3,6 +3,8 @@ package me.dionclei.workshopspringboot.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ public class ProductService {
 		this.repository = repository;
 	}
 	
+	@Cacheable(value = "productById", key = "#id")
 	@Transactional(readOnly = true)
 	public Product findById(long id) {
 		Optional<Product> obj = repository.findById(id);
@@ -28,14 +31,15 @@ public class ProductService {
 		throw new ResourceNotFoundException(id);
 	}
 	
+	@Cacheable("allProducts")
 	@Transactional(readOnly = true)
 	public List<Product> findAll() {
 		return repository.findAll();
 	}
 	
+	@CacheEvict(value = { "allProducts" }, allEntries = true)
 	@Transactional
 	public Product save(Product product) {
 		return repository.save(product);
 	}
-	
 }

@@ -3,6 +3,8 @@ package me.dionclei.workshopspringboot.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +22,13 @@ public class OrderService {
 		this.repository = repository;
 	}
 	
+	@Cacheable("allOrders")
 	@Transactional(readOnly = true)
 	public List<Order> findAll() {
 		return repository.findAll();
 	}
 	
+	@Cacheable(value = "orderById", key = "#id")
 	@Transactional(readOnly = true)
 	public Order findById(Long id) {
 		Optional<Order> order = repository.findById(id);
@@ -34,8 +38,8 @@ public class OrderService {
 		throw new ResourceNotFoundException(id);
 	}
 	
+	@CacheEvict(value = { "allOrders" }, allEntries = true)
 	public void save(Order obj) {
 		repository.save(obj);
 	}
-	
 }

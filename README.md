@@ -25,6 +25,7 @@ The main technologies used in this project are:
 - ✅ Authentication
 - ✅ Orders  
 - ✅ Products
+- ✅ Cache - Caffeine
 
 ## ⚙ Prerequisites
 
