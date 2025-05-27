@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
 import me.dionclei.workshopspringboot.entities.SecurityFilter;
 
 @Configuration
@@ -33,8 +34,12 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN")
-						.anyRequest().authenticated())
+						.requestMatchers("/orders/{id}").authenticated()
+						.anyRequest().permitAll())
 				.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+				.exceptionHandling(e -> e.authenticationEntryPoint((request, response, ex) -> {
+					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				}))
 				.build();
 	}
 	
